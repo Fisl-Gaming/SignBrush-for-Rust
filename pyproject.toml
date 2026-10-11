@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "signbrush"
+version = "0.1.0"
+description = "Open-source automatic image painter for Rust signs (screen capture + mouse emulation only)"
+readme = "README.en.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+  "pillow>=10.0",
+  "numpy>=1.26",
+  "opencv-python-headless>=4.8",
+  "mss>=9.0",
+  "pydirectinput>=1.0.4",
+  "PyQt6>=6.5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pyinstaller>=6.5"]
+
+[project.scripts]
+signbrush = "signbrush.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["signbrush*"]
+
+[tool.setuptools.package-data]
+signbrush = ["default_config.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,299 @@
+{
+  "version": 2,
+  "active_profile": "default",
+  "hotkeys": {
+    "stop": "f8",
+    "pause": "f7",
+    "capture": "f9"
+  },
+  "sign_types": {
+    "sign.small.wood": {
+      "label": "Small Wooden Sign",
+      "size": [
+        256,
+        128
+      ],
+      "blank": "#A89383"
+    },
+    "sign.medium.wood": {
+      "label": "Wooden Sign",
+      "size": [
+        512,
+        256
+      ],
+      "blank": "#A89383"
+    },
+    "sign.large.wood": {
+      "label": "Large Wooden Sign",
+      "size": [
+        512,
+        256
+      ],
+      "blank": "#A89383"
+    },
+    "sign.huge.wood": {
+      "label": "Huge Wooden Sign",
+      "size": [
+        1024,
+        256
+      ],
+      "blank": "#A89383"
+    },
+    "sign.pictureframe.landscape": {
+      "label": "Landscape Picture Frame",
+      "size": [
+        256,
+        128
+      ],
+      "blank": "#B3ABA0"
+    },
+    "sign.pictureframe.portrait": {
+      "label": "Portrait Picture Frame",
+      "size": [
+        128,
+        256
+      ],
+      "blank": "#B3ABA0"
+    },
+    "sign.pictureframe.tall": {
+      "label": "Tall Picture Frame",
+      "size": [
+        128,
+        512
+      ],
+      "blank": "#B3ABA0"
+    },
+    "sign.pictureframe.xl": {
+      "label": "XL Picture Frame",
+      "size": [
+        512,
+        512
+      ],
+      "blank": "#B3ABA0"
+    },
+    "sign.pictureframe.xxl": {
+      "label": "XXL Picture Frame",
+      "size": [
+        1024,
+        512
+      ],
+      "blank": "#B3ABA0"
+    },
+    "sign.post.single": {
+      "label": "Single Sign Post",
+      "size": [
+        256,
+        128
+      ],
+      "blank": "#A89383"
+    },
+    "sign.post.double": {
+      "label": "Double Sign Post",
+      "size": [
+        512,
+        512
+      ],
+      "blank": "#A89383"
+    },
+    "sign.post.town": {
+      "label": "One Sided Town Sign Post",
+      "size": [
+        512,
+        256
+      ],
+      "blank": "#94624D"
+    },
+    "sign.post.town.roof": {
+      "label": "Two Sided Town Sign Post",
+      "size": [
+        512,
+        256
+      ],
+      "blank": "#94624D"
+    },
+    "sign.hanging": {
+      "label": "Two Sided Hanging Sign",
+      "size": [
+        256,
+        512
+      ],
+      "blank": "#534C46"
+    },
+    "sign.hanging.ornate": {
+      "label": "Two Sided Ornate Hanging Sign",
+      "size": [
+        512,
+        256
+      ],
+      "blank": "#534C46"
+    },
+    "sign.hanging.banner.large": {
+      "label": "Large Banner Hanging",
+      "size": [
+        256,
+        1024
+      ],
+      "blank": "#A89383"
+    },
+    "sign.pole.banner.large": {
+      "label": "Large Banner on Pole",
+      "size": [
+        256,
+        1024
+      ],
+      "blank": "#A89383"
+    },
+    "sign.neon.125x125": {
+      "label": "Small Neon Sign",
+      "size": [
+        128,
+        128
+      ],
+      "blank": "#000000"
+    },
+    "sign.neon.125x215": {
+      "label": "Medium Neon Sign",
+      "size": [
+        256,
+        128
+      ],
+      "blank": "#000000"
+    },
+    "sign.neon.xl": {
+      "label": "Large Neon Sign",
+      "size": [
+        256,
+        256
+      ],
+      "blank": "#000000"
+    },
+    "custom": {
+      "label": "Custom size",
+      "size": [
+        512,
+        256
+      ],
+      "blank": "#A89383"
+    }
+  },
+  "settings": {
+    "algorithm": "hybrid",
+    "sign_type": "auto",
+    "detail": 2,
+    "fill_size": 16,
+    "brush_shape": "square",
+    "color_mode": "hex",
+    "fit": "pad",
+    "background": "#FFFFFF",
+    "alpha_threshold": 0,
+    "dither": false,
+    "max_colors": 0,
+    "resample": "lanczos",
+    "base_fill": true,
+    "coarse": true,
+    "max_bridge": 12,
+    "line_mode": "jump",
+    "verify_passes": 2,
+    "verify_tolerance": 0.002,
+    "action_delay_ms": 20,
+    "move_delay_ms": 15,
+    "draw_step_px": 6,
+    "draw_step_delay_ms": 4,
+    "click_hold_ms": 20,
+    "color_switch_ms": 15,
+    "brush_switch_ms": 30,
+    "speed": 1.0,
+    "save_every": 0,
+    "save_method": "off",
+    "mouse_guard_px": 12,
+    "window_title": "Rust",
+    "max_cells": 600000,
+    "countdown_s": 3,
+    "despeckle": 1,
+    "game_fps": 60,
+    "frames_per_action": 2.0,
+    "shape_count": 6000,
+    "shape_sizes": "3,6,12,25,50,100",
+    "shape_alphas": "0.09,0.19,0.39,0.75,0.9,1.0",
+    "shape_work_size": 256,
+    "hybrid_shapes": 1000,
+    "fix_tolerance": 8.0,
+    "field_commit": "click",
+    "verify_de": 10.0,
+    "min_frames": 1.0,
+    "transparent": "fill",
+    "brush_cover": 1.2,
+    "gap_frames": 3.0,
+    "confirm_start": true
+  },
+  "profiles": {
+    "default": {
+      "description": "Not calibrated yet. Open a sign in Rust and run calibration.",
+      "screen": null,
+      "canvas": null,
+      "palette_grid": {
+        "first": null,
+        "last": null,
+        "cols": 1,
+        "rows": 3
+      },
+      "palette": [
+        {
+          "name": "Fav 1",
+          "rgb": "#8DB93E"
+        },
+        {
+          "name": "Fav 2",
+          "rgb": "#C8402C"
+        },
+        {
+          "name": "Fav 3",
+          "rgb": "#1F6EAD"
+        }
+      ],
+      "controls": {
+        "size": {
+          "slider_min": null,
+          "slider_max": null,
+          "range": [
+            1,
+            100
+          ],
+          "textbox": null
+        },
+        "opacity": {
+          "slider_min": null,
+          "slider_max": null,
+          "range": [
+            0,
+            1
+          ],
+          "textbox": null
+        },
+        "spacing": {
+          "slider_min": null,
+          "slider_max": null,
+          "range": [
+            0,
+            1
+          ],
+          "textbox": null
+        }
+      },
+      "buttons": {
+        "brush_square": null,
+        "brush_circle": null,
+        "save": null,
+        "focus": null,
+        "hex_field": null
+      },
+      "size_scale": 1.0,
+      "opacity": 1.0,
+      "spacing": 0.1,
+      "picker_sv": null,
+      "picker_hue": null,
+      "picker_hue_lut": [],
+      "size_measured": false
+    }
+  }
+}

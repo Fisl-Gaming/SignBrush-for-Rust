@@ -1,0 +1,54 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test-and-build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m pytest -q
+
+      - name: Build exe
+        run: pyinstaller --noconfirm SignBrush.spec
+
+      - name: Smoke-test exe (dry-run CLI)
+        shell: pwsh
+        run: |
+          python -c "from PIL import Image; Image.new('RGB',(64,32),(200,50,50)).save('smoke.png')"
+          $p = Start-Process -FilePath dist/SignBrush.exe -ArgumentList 'dryrun','smoke.png','-o','smoke.plan.png' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "exe exited with $($p.ExitCode)" }
+          if (-not (Test-Path smoke.plan.png)) { throw "dry-run produced no output" }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SignBrush-windows
+          path: dist/SignBrush.exe
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/SignBrush.exe
