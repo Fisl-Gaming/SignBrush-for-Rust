@@ -22,7 +22,7 @@
     "notice.cta": "How to help",
     "gallery.eyebrow": "Result in game", "gallery.title": "Painted by SignBrush",
     "gallery.text": "A real screenshot from Rust: a sign on a wall. Click to see the whole frame.",
-    "gallery.cap1": "Large wooden sign · hybrid",
+    "gallery.cap1": "Large wooden sign · pixels",
     "ba.eyebrow": "Before and after", "ba.title": "Source vs. sign",
     "ba.text": "Drag the divider. On the right is what SignBrush paints in game in hybrid mode: strokes cover the smooth areas, details are touched up exactly.",
     "ba.before": "Source", "ba.after": "Sign",
