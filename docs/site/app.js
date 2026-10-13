@@ -96,6 +96,14 @@
     entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
   }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
   $$(".reveal").forEach((el, i) => { el.style.transitionDelay = `${(i % 4) * 70}ms`; io.observe(el); });
+  // A jump to an anchor (#gallery) can land before the observer's first pass:
+  // show whatever is already on screen right away.
+  const revealVisible = () => $$(".reveal:not(.in)").forEach((el) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < innerHeight && r.bottom > 0) { el.classList.add("in"); io.unobserve(el); }
+  });
+  addEventListener("load", revealVisible);
+  addEventListener("hashchange", () => setTimeout(revealVisible, 50));
 
   /* ------------------------------------------------ cursor + paint trail */
   const fine = matchMedia("(pointer: fine)").matches;
