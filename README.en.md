@@ -1,6 +1,6 @@
 # SignBrush for Rust
 
-**[Русская версия →](README.md)**
+**[Project website →](https://fisl-gaming.github.io/SignBrush-for-Rust/)** · **[Русская версия →](README.md)**
 
 A free (MIT) Windows program that puts any picture onto a sign or picture frame in the game **Rust**. It paints the picture with the mouse in the in-game sign editor, the same way a person would, only faster and more precisely.
 

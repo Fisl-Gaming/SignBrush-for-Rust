@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SignBrush for Rust</title>
+<meta name="description" content="SignBrush for Rust — бесплатная программа, которая сама рисует любую картинку на табличке в Rust. Гибрид мазков и попиксельной доводки, HEX-цвета, калибровка за минуту.">
+<meta property="og:title" content="SignBrush for Rust">
+<meta property="og:description" content="Любая картинка — на табличку в Rust. Бесплатно и с открытым кодом.">
+<meta property="og:image" content="site/img/ingame-wall-crop.webp">
+<meta name="theme-color" content="#0A0F0C">
+<link rel="icon" href="site/img/logo.svg" type="image/svg+xml">
+<link rel="preload" href="site/fonts/Onest.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="site/style.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"><span></span></div>
+<canvas class="trail" aria-hidden="true"></canvas>
+<div class="cursor" aria-hidden="true"><span class="cursor-ring"></span><span class="cursor-dot"></span></div>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="SignBrush for Rust">
+    <img src="site/img/logo.svg" alt="" width="34" height="34">
+    <span>SignBrush <em>for Rust</em></span>
+  </a>
+  <nav class="links" aria-label="Разделы">
+    <a href="#gallery" data-i18n="nav.gallery">В игре</a>
+    <a href="#modes" data-i18n="nav.modes">Режимы</a>
+    <a href="#how" data-i18n="nav.how">Как работает</a>
+    <a href="#feedback" data-i18n="nav.feedback">Фидбек</a>
+    <a href="#faq" data-i18n="nav.faq">Вопросы</a>
+  </nav>
+  <div class="nav-right">
+    <div class="lang" role="group" aria-label="Язык · Language">
+      <button type="button" data-lang="ru">RU</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="https://github.com/Fisl-Gaming/SignBrush-for-Rust" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.34.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="hero-text">
+      <a class="beta-pill" href="#feedback">
+        <span class="beta-dot"></span>
+        <span data-i18n="hero.beta">Бета · нужен ваш фидбек</span>
+      </a>
+      <h1 data-i18n-html="hero.title">Любая картинка&nbsp;— <span class="ink">на&nbsp;табличку</span> в&nbsp;Rust</h1>
+      <p class="lead" data-i18n="hero.lead">SignBrush сам водит мышью в редакторе таблички и рисует ваш арт: крупные полупрозрачные мазки, потом точная доводка по пикселям. Обычно 2–10 минут вместо часа ручной работы.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/Fisl-Gaming/SignBrush-for-Rust/releases/latest" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 20h16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span data-i18n="hero.download">Скачать для Windows</span>
+        </a>
+        <a class="btn btn-ghost" href="#gallery" data-i18n="hero.see">Смотреть результаты</a>
+      </div>
+      <ul class="facts">
+        <li><b>3</b><span data-i18n="facts.modes">режима рисования</span></li>
+        <li><b>2–10</b><span data-i18n="facts.minutes">минут на картинку</span></li>
+        <li><b>F8</b><span data-i18n="facts.stop">стоп в любой момент</span></li>
+      </ul>
+    </div>
+
+    <div class="hero-art">
+      <div class="sign">
+        <div class="sign-board">
+          <canvas id="paint" width="512" height="256" aria-label="Анимация: программа рисует картинку на табличке" role="img"></canvas>
+          <div class="brush" aria-hidden="true"></div>
+        </div>
+        <div class="sign-post" aria-hidden="true"></div>
+      </div>
+      <div class="hud">
+        <span class="hud-dot"></span>
+        <span class="hud-label" data-i18n="hero.hud">Рисую</span>
+        <span class="hud-num" id="hudNum">0%</span>
+        <span class="hud-bar"><i id="hudBar"></i></span>
+      </div>
+    </div>
+  </section>
+
+  <aside class="notice reveal" aria-label="Статус проекта">
+    <div class="notice-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 3 2.5 20h19z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.1" fill="currentColor"/></svg>
+    </div>
+    <div>
+      <b data-i18n="notice.title">Программа ещё не полностью оптимизирована</b>
+      <p data-i18n="notice.text">Скорость, калибровка и проверка результата пока подстраиваются вручную, а игра на разных компьютерах ведёт себя по-разному. Чтобы довести автоматизацию до «нажал и забыл», нам нужен ваш фидбек: какой FPS, разрешение, табличка и что пошло не так.</p>
+    </div>
+    <a class="btn btn-warn btn-sm" href="#feedback" data-i18n="notice.cta">Как помочь</a>
+  </aside>
+
+  <section id="gallery" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="gallery.eyebrow">Результат в игре</span>
+      <h2 data-i18n="gallery.title">Нарисовано SignBrush</h2>
+      <p data-i18n="gallery.text">Настоящие скриншоты из Rust: табличка на стене и рамка для картины. Нажмите, чтобы рассмотреть.</p>
+    </div>
+    <div class="gallery">
+      <figure class="shot shot-wide reveal tilt" data-full="site/img/ingame-wall.webp">
+        <img src="site/img/ingame-wall-crop.webp" alt="Аниме-арт, нарисованный на деревянной табличке в Rust" loading="lazy" width="1010" height="530">
+        <figcaption><span data-i18n="gallery.cap1">Большая деревянная табличка · гибрид</span><span class="zoom" aria-hidden="true">⤢</span></figcaption>
+      </figure>
+      <figure class="shot reveal tilt" data-full="site/img/ingame-frame.webp">
+        <img src="site/img/ingame-frame.webp" alt="Мем-лицо, нарисованное в рамке для картины в Rust" loading="lazy" width="1004" height="1096">
+        <figcaption><span data-i18n="gallery.cap2">Рамка для картины · чёрно-белый арт</span><span class="zoom" aria-hidden="true">⤢</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section split">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="ba.eyebrow">До и после</span>
+      <h2 data-i18n="ba.title">Исходник против таблички</h2>
+      <p data-i18n="ba.text">Потяните разделитель. Справа — то, что SignBrush нарисует в игре в режиме «гибрид»: мазки закрывают плавные места, а детали дорисовываются точно.</p>
+    </div>
+    <div class="compare reveal" id="compare" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="До и после">
+      <img src="site/img/preview_hex.webp" alt="Результат на табличке" width="512" height="256">
+      <div class="compare-top"><img src="site/img/sample.webp" alt="Исходная картинка" width="800" height="400"></div>
+      <div class="compare-handle" aria-hidden="true"><span></span></div>
+      <span class="compare-tag left" data-i18n="ba.before">Исходник</span>
+      <span class="compare-tag right" data-i18n="ba.after">Табличка</span>
+    </div>
+  </section>
+
+  <section id="modes" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="modes.eyebrow">Три алгоритма</span>
+      <h2 data-i18n="modes.title">Выберите между скоростью и точностью</h2>
+    </div>
+    <div class="cards">
+      <article class="card reveal featured">
+        <span class="badge" data-i18n="modes.default">По умолчанию</span>
+        <h3 data-i18n="modes.h1">Гибрид</h3>
+        <p data-i18n="modes.t1">~1000 полупрозрачных мазков быстро закрывают холст, затем квадратная кисть дорисовывает только клетки, где цвет ещё отличается от нужного.</p>
+        <div class="meter"><span style="--v:.85"></span><em data-i18n="modes.q">точность</em></div>
+        <div class="meter"><span style="--v:.75"></span><em data-i18n="modes.s">скорость</em></div>
+      </article>
+      <article class="card reveal">
+        <h3 data-i18n="modes.h2">Попиксельно</h3>
+        <p data-i18n="modes.t2">Каждая клетка сетки получает ровно свой цвет: точная копия с палитрой, подобранной под картинку. Самый аккуратный и самый долгий режим.</p>
+        <div class="meter"><span style="--v:.95"></span><em data-i18n="modes.q">точность</em></div>
+        <div class="meter"><span style="--v:.4"></span><em data-i18n="modes.s">скорость</em></div>
+      </article>
+      <article class="card reveal">
+        <h3 data-i18n="modes.h3">Только мазки</h3>
+        <p data-i18n="modes.t3">Картина целиком из полупрозрачных кругов — мягкий «живописный» вид без мелких деталей, один клик на мазок.</p>
+        <div class="meter"><span style="--v:.6"></span><em data-i18n="modes.q">точность</em></div>
+        <div class="meter"><span style="--v:.6"></span><em data-i18n="modes.s">скорость</em></div>
+      </article>
+    </div>
+    <figure class="wide-figure reveal">
+      <img src="site/img/compare.webp" alt="Сравнение: исходник, гибрид, попиксельно и только мазки" loading="lazy" width="1060" height="616">
+    </figure>
+  </section>
+
+  <section id="how" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="how.eyebrow">Как это работает</span>
+      <h2 data-i18n="how.title">Четыре шага до готовой таблички</h2>
+    </div>
+    <div class="how">
+      <ol class="steps">
+        <li class="reveal"><span class="num">1</span><div><b data-i18n="how.s1">Перетащите картинку</b><p data-i18n="how.t1">PNG, JPG, GIF, WebP или прямо из буфера обмена. Сразу видно, как она ляжет на табличку.</p></div></li>
+        <li class="reveal"><span class="num">2</span><div><b data-i18n="how.s2">Откалибруйте один раз</b><p data-i18n="how.t2">Откройте редактор таблички, нажмите F9 и отметьте холст, HEX-поле и кисть на замороженном снимке. Около минуты на разрешение экрана.</p></div></li>
+        <li class="reveal"><span class="num">3</span><div><b data-i18n="how.s3">Измерьте кисть и скорость</b><p data-i18n="how.t3">Программа ставит пару пробных точек, проверяет их по скриншоту и подбирает паузы под ваш FPS — без щелей и «хвостов».</p></div></li>
+        <li class="reveal"><span class="num">4</span><div><b data-i18n="how.s4">Нажмите «Нарисовать»</b><p data-i18n="how.t4">Переключитесь в игру за время отсчёта и не трогайте мышь. F7 — пауза, F8 — стоп. После рисования снимок сверяется с планом и пропуски дорисовываются.</p></div></li>
+      </ol>
+      <figure class="app-shot reveal tilt">
+        <img id="uiShot" src="site/img/ui-ru.webp" alt="Окно SignBrush: настройки, превью и оценка времени" loading="lazy" width="1440" height="900">
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="safe.eyebrow">Честно и безопасно</span>
+      <h2 data-i18n="safe.title">Только экран и мышь</h2>
+    </div>
+    <div class="cards cards-4">
+      <div class="mini reveal"><b data-i18n="safe.h1">Без инъекций</b><p data-i18n="safe.t1">Только снимок экрана и эмуляция ввода. Никакого чтения памяти игры, хуков, драйверов и обхода античита.</p></div>
+      <div class="mini reveal"><b data-i18n="safe.h2">F8 работает всегда</b><p data-i18n="safe.t2">Аварийная остановка за миллисекунды, даже посреди штриха: кнопка мыши сразу отпускается.</p></div>
+      <div class="mini reveal"><b data-i18n="safe.h3">Сам ставит паузу</b><p data-i18n="safe.t3">Сдвинули мышь или переключились из Rust — рисование замирает. Прогресс сохраняется.</p></div>
+      <div class="mini reveal"><b data-i18n="safe.h4">Не ходит в сеть</b><p data-i18n="safe.t4">Ни аккаунтов, ни телеметрии, ни слежки за игроками. Код открыт под лицензией MIT.</p></div>
+    </div>
+  </section>
+
+  <section id="feedback" class="section feedback reveal">
+    <div>
+      <span class="eyebrow warn" data-i18n="fb.eyebrow">Бета</span>
+      <h2 data-i18n="fb.title">Помогите довести автоматизацию</h2>
+      <p data-i18n="fb.text">SignBrush пока не полностью оптимизирован: на одних компьютерах он рисует идеально, на других игра пропускает штрихи или нужна ручная подстройка скорости. Каждый отчёт помогает сделать настройку автоматической.</p>
+      <ul class="checklist">
+        <li data-i18n="fb.l1">FPS в игре с открытым редактором и разрешение экрана</li>
+        <li data-i18n="fb.l2">Тип таблички, алгоритм и детализация</li>
+        <li data-i18n="fb.l3">Что пошло не так: щели, «хвосты», пропуски, чат открылся</li>
+        <li data-i18n="fb.l4">Журнал программы (кнопка «Копировать») и скриншот результата</li>
+      </ul>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/Fisl-Gaming/SignBrush-for-Rust/issues/new" target="_blank" rel="noopener" data-i18n="fb.cta">Написать отчёт на GitHub</a>
+        <a class="btn btn-ghost" href="https://github.com/Fisl-Gaming/SignBrush-for-Rust/issues" target="_blank" rel="noopener" data-i18n="fb.all">Все обсуждения</a>
+      </div>
+    </div>
+    <div class="feedback-art" aria-hidden="true">
+      <div class="log">
+        <div><time>[20:41]</time> Проверка #1: неверных клеток 412 (точность 98.74%)</div>
+        <div><time>[20:41]</time> Тест скорости: пауза 2 кадра — хвостов 0</div>
+        <div class="ok"><time>[20:42]</time> ✓ Готово: 1 367 штрихов за 5:27</div>
+        <div class="cursor-line"><time>[20:42]</time> <span class="caret"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="faq.eyebrow">Вопросы</span>
+      <h2 data-i18n="faq.title">Частые вопросы</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal"><summary data-i18n="faq.q1">Меня за это забанят?</summary><p data-i18n="faq.a1">Гарантий нет. SignBrush не трогает память игры и только эмулирует мышь, но правила конкретного сервера могут запрещать автоматизацию. Используйте на свой риск и уточняйте правила сервера.</p></details>
+      <details class="reveal"><summary data-i18n="faq.q2">Почему у кого-то 5 минут, а у меня 15?</summary><p data-i18n="faq.a2">Игра принимает движение мыши раз в кадр, поэтому время почти напрямую зависит от FPS с открытым редактором таблички. При 144 FPS рисование примерно вдвое быстрее, чем при 60. Запустите «Тест скорости» — он подберёт паузу сам.</p></details>
+      <details class="reveal"><summary data-i18n="faq.q3">Какие таблички поддерживаются?</summary><p data-i18n="faq.a3">Деревянные таблички всех размеров, рамки для картин, баннеры и неоновые вывески. Тип можно выбрать вручную или взять пропорции прямо с холста на экране.</p></details>
+      <details class="reveal"><summary data-i18n="faq.q4">Можно оставить фон таблички?</summary><p data-i18n="faq.a4">Да. Прозрачные места и поля можно не закрашивать — тогда останется то, что уже было на табличке, а рисование станет быстрее.</p></details>
+      <details class="reveal"><summary data-i18n="faq.q5">Нужен ли интернет?</summary><p data-i18n="faq.a5">Нет. Программа вообще не обращается к сети: всё считается на вашем компьютере.</p></details>
+    </div>
+  </section>
+
+  <section class="final reveal">
+    <h2 data-i18n="final.title">Готовы повесить свой арт?</h2>
+    <p data-i18n="final.text">Бесплатно, с открытым кодом, для Windows 10 и 11.</p>
+    <a class="btn btn-primary btn-lg" href="https://github.com/Fisl-Gaming/SignBrush-for-Rust/releases/latest" target="_blank" rel="noopener" data-i18n="hero.download">Скачать для Windows</a>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand"><img src="site/img/logo.svg" alt="" width="26" height="26"><span>SignBrush <em>for Rust</em></span></div>
+  <p data-i18n="footer.legal">Независимый фанатский проект, не связан с Facepunch Studios. «Rust» — товарный знак Facepunch Studios Ltd.</p>
+  <p class="small"><span data-i18n="footer.license">Код — MIT. Шрифты Onest и JetBrains Mono — SIL OFL 1.1.</span> · <a href="https://github.com/Fisl-Gaming/SignBrush-for-Rust" target="_blank" rel="noopener">GitHub</a></p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button type="button" class="lightbox-close" aria-label="Закрыть">×</button>
+  <img alt="">
+</div>
+
+<script src="site/app.js"></script>
+</body>
+</html>

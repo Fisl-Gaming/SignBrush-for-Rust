@@ -1,6 +1,6 @@
 # SignBrush for Rust
 
-**[English version →](README.en.md)**
+**[Сайт проекта →](https://fisl-gaming.github.io/SignBrush-for-Rust/)** · **[English version →](README.en.md)**
 
 Свободная (MIT) программа для Windows, которая переносит любую картинку на табличку или рамку в игре **Rust**. Она рисует картинку мышью в игровом редакторе табличек — так же, как это делал бы человек, только быстрее и точнее.
 
