@@ -203,6 +203,8 @@ main { padding: 0 max(20px, calc((100vw - var(--max)) / 2)); }
 }
 .zoom { color: var(--accent-text); font-size: 18px; }
 
+.gallery-single { grid-template-columns: 1fr; max-width: 980px; }
+
 /* before / after */
 .split { display: grid; grid-template-columns: .8fr 1.2fr; gap: 50px; align-items: center; }
 .split .section-head { margin: 0; }
